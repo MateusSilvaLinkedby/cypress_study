@@ -2,7 +2,7 @@ describe('Hacker Stories', () => {
   const initialTerm = 'React'
   const newTerm = 'Cypress'
 
-  context.skip('Hitting the Real API', () => {
+  context('Hitting the Real API', () => {
     it('shows 20 stories, then the next 20 after clicking "More"', () => {
       cy.intercept(
         {
@@ -94,86 +94,72 @@ describe('Hacker Stories', () => {
         cy.contains(problemaInternet)
           .should('be.visible')
       })
-      context('Footer and List of  stories', () => {
-        const stories = require('../fixtures/stories')
-        context('List of stories', () => {
-          // Since the API is external,
-          // I can't control what it will provide to the frontend,
-          // and so, how can I assert on the data?
-          // This is why this test is being skipped.
-          // TODO: Find a way to test it out.
-          it.only('shows the right data for all rendered stories', () => {
-            cy.visit('/')
-            cy.wait('@getHome')
-              .its('response.body')
-              .then((responseBody) => {
-                console.log('Resposta da API',responseBody)
-                expect(responseBody).to.not.be.empty
-                })
-            cy.get('.item')
-            .should('have.length',3)
-            cy.get('.item')
-              .should('contain', stories.hits[0].title)
-              .and('contain',stories.hits[0].author)
-              .and('contain',stories.hits[0].num_comments)
-              .and('contain',stories.hits[0].points)
-              .find('a')
-              .should('have.attr','href',stories.hits[0].url)
-          })
-
-          it('shows only 2 stories after dimissing the first story', () => {
-            cy.get('.button-small')
-              .first()
-              .click()
-
-            cy.get('.item').should('have.length', 0)
-          })
-
-          // Since the API is external,
-          // I can't control what it will provide to the frontend,
-          // and so, how can I test ordering?
-          // This is why these tests are being skipped.
-          // TODO: Find a way to test them out.
-          context.only('Order by', () => {
-            it('orders by title', () => {
-              cy.get('.list-header-button:contains(Title)')
-              .first()
-              .click()
-              .as('orderByTitle')
-
-            })
-
-            it('orders by author', () => {})
-
-            it('orders by comments', () => {})
-
-            it('orders by points', () => {})
-          })
-        })
-      })
     })
-    // beforeEach(() => {
-    //   cy.intercept(
-    //     'GET',
-    //    `**/search?query=${initialTerm}&page=0`,
-    //    { fixture: 'stories' })
-    //    .as('getHome')
-    //   cy.visit('/')
-    //   // cy.assertLoadingIsShownAndHidden()
-    //   cy.wait('@getHome')
-    //     .its('response.statusCode')
-    //     .should('eq', 200)
-    //   // cy.contains('More').should('be.visible')
-    // })
 
     it('shows the footer', () => {
       cy.get('footer')
         .should('be.visible')
         .and('contain', 'Icons made by Freepik from www.flaticon.com')
     })
+    context('Footer and List of  stories', () => {
+      const stories = require('../fixtures/stories')
+      context('List of stories', () => {
+        // Since the API is external,
+        // I can't control what it will provide to the frontend,
+        // and so, how can I assert on the data?
+        // This is why this test is being skipped.
+        // TODO: Find a way to test it out.
+        it('shows the right data for all rendered stories', () => {
+          cy.visit('/')
+          cy.wait('@getHome')
+            .its('response.body')
+            .then((responseBody) => {
+              console.log('Resposta da API', responseBody)
+              expect(responseBody).to.not.be.empty
+            })
+          cy.get('.item')
+            .should('have.length', 3)
+          cy.get('.item')
+            .should('contain', stories.hits[0].title)
+            .and('contain', stories.hits[0].author)
+            .and('contain', stories.hits[0].num_comments)
+            .and('contain', stories.hits[0].points)
+            .find('a')
+            .should('have.attr', 'href', stories.hits[0].url)
+        })
+
+        it('shows only 2 stories after dimissing the first story', () => {
+          cy.get('.button-small')
+            .first()
+            .click()
+
+          cy.get('.item').should('have.length', 0)
+        })
+
+        // Since the API is external,
+        // I can't control what it will provide to the frontend,
+        // and so, how can I test ordering?
+        // This is why these tests are being skipped.
+        // TODO: Find a way to test them out.
+        context('Order by', () => {
+          it('orders by title', () => {
+            cy.get('.list-header-button:contains(Title)')
+              .first()
+              .click()
+              .as('orderByTitle')
+          })
+
+          it('orders by author', () => {})
+
+          it('orders by comments', () => {})
+
+          it('orders by points', () => {})
+        })
+      })
+    })
   })
 
-  context.skip('Search the API', () => {
+  context('Search the API', () => {
     beforeEach(() => {
       cy.intercept(
         'GET',
@@ -192,8 +178,6 @@ describe('Hacker Stories', () => {
 
       cy.get('#search')
         .clear()
-
-    
     })
 
     it('types and hits ENTER', () => {
