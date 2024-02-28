@@ -1,7 +1,7 @@
 {
     "hits":[
         {
-            "title":"Exemplo 1",
+            "title":"Cypress 1",
             "url":"https://linkedbydes.tamosjuntos.com.br",
             "author":"Fulano 1",
             "num_comments":34,
@@ -15,6 +15,15 @@
             "num_comments":10,
             "points":912,
             "objectId":1
+        },
+        {
+            "title":"Cypress 3",
+            "url":"https://noroeste.tamosjuntos.com.br",
+            "author":"Fulano 3",
+            "num_comments":24,
+            "points":1000,
+            "objectId":2
         }
     ]
+    
 }
