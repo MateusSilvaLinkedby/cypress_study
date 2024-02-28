@@ -101,59 +101,71 @@ describe('Hacker Stories', () => {
         .should('be.visible')
         .and('contain', 'Icons made by Freepik from www.flaticon.com')
     })
-    context('Footer and List of  stories', () => {
+    context('List of stories', () => {
       const stories = require('../fixtures/stories')
-      context('List of stories', () => {
-        // Since the API is external,
-        // I can't control what it will provide to the frontend,
-        // and so, how can I assert on the data?
-        // This is why this test is being skipped.
-        // TODO: Find a way to test it out.
-        it('shows the right data for all rendered stories', () => {
-          cy.visit('/')
-          cy.wait('@getHome')
-            .its('response.body')
-            .then((responseBody) => {
-              console.log('Resposta da API', responseBody)
-              expect(responseBody).to.not.be.empty
-            })
-          cy.get('.item')
-            .should('have.length', 3)
-          cy.get('.item')
-            .should('contain', stories.hits[0].title)
-            .and('contain', stories.hits[0].author)
-            .and('contain', stories.hits[0].num_comments)
-            .and('contain', stories.hits[0].points)
-            .find('a')
-            .should('have.attr', 'href', stories.hits[0].url)
-        })
+      // Since the API is external,
+      // I can't control what it will provide to the frontend,
+      // and so, how can I assert on the data?
+      // This is why this test is being skipped.
+      // TODO: Find a way to test it out.
+      it('shows the right data for all rendered stories', () => {
+        cy.visit('/')
+        cy.wait('@getHome')
+          .its('response.body')
+          .then((responseBody) => {
+            console.log('Resposta da API', responseBody)
+            expect(responseBody).to.not.be.empty
+          })
+        cy.get('.item')
+          .should('have.length', 3)
+        cy.get('.item')
+          .should('contain', stories.hits[0].title)
+          .and('contain', stories.hits[0].author)
+          .and('contain', stories.hits[0].num_comments)
+          .and('contain', stories.hits[0].points)
+          .find('a')
+          .should('have.attr', 'href', stories.hits[0].url)
+      })
 
-        it('shows only 2 stories after dimissing the first story', () => {
-          cy.get('.button-small')
+      it('shows only 2 stories after dimissing the first story', () => {
+        cy.get('.button-small')
+          .first()
+          .click()
+
+        cy.get('.item').should('have.length', 0)
+      })
+
+      // Since the API is external,
+      // I can't control what it will provide to the frontend,
+      // and so, how can I test ordering?
+      // This is why these tests are being skipped.
+      // TODO: Find a way to test them out.
+      context('Order by', () => {
+        it('orders by title', () => {
+          cy.get('.list-header-button:contains(Title)')
             .first()
             .click()
-
-          cy.get('.item').should('have.length', 0)
+            .as('orderByTitle')
         })
 
-        // Since the API is external,
-        // I can't control what it will provide to the frontend,
-        // and so, how can I test ordering?
-        // This is why these tests are being skipped.
-        // TODO: Find a way to test them out.
-        context('Order by', () => {
-          it('orders by title', () => {
-            cy.get('.list-header-button:contains(Title)')
-              .first()
-              .click()
-              .as('orderByTitle')
-          })
+        it('orders by author', () => {})
 
-          it('orders by author', () => {})
+        it('orders by comments', () => {})
 
-          it('orders by comments', () => {})
-
-          it('orders by points', () => {})
+        it('orders by points', () => {})
+      })
+      context('Shows no story when none is returned',() => {
+        it('Shows no story when none',() => {
+          cy.intercept(
+            'GET',
+            `**/search?query=${initialTerm}&page=0`,
+            { fixture: 'empty' })
+            .as('getEmpty')
+  
+          cy.visit('/')
+          cy.wait('@getEmpty')
+          cy.get('.item')
+            .should('not.exist')
         })
       })
     })
