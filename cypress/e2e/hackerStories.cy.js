@@ -12,10 +12,14 @@ describe('Hacker Stories', () => {
         .as('getStories')
       cy.visit('/')
       cy.wait('@getStories')
-      cy.get('.item').should('have.length', 20)
-      cy.contains('More').click()
+      cy.get('.item')
+        .should('have.length', 20)
+      cy.contains('More')
+        .should('be.visible')
+        .click()
       cy.wait('@getStories')
-      cy.get('.item').should('have.length', 40)
+      cy.get('.item')
+        .should('have.length', 40)
     })
 
     it('searches via the last searched term', () => {
@@ -27,9 +31,11 @@ describe('Hacker Stories', () => {
       cy.visit('/')
       cy.wait('@newSearch')
       cy.get('#search')
+        .should('be.visible')
         .clear()
 
       cy.get('#search')
+        .should('be.visible')
         .type(`${newTerm}{enter}`)
 
       cy.wait('@newSearch')
@@ -40,7 +46,8 @@ describe('Hacker Stories', () => {
 
       cy.wait('@newSearch')
 
-      cy.get('.item').should('have.length', 20)
+      cy.get('.item')
+        .should('have.length', 20)
       cy.get('.item')
         .first()
         .should('contain', initialTerm)
@@ -129,10 +136,12 @@ describe('Hacker Stories', () => {
 
       it('shows only 2 stories after dimissing the first story', () => {
         cy.get('.button-small')
+          .should('be.visible')
           .first()
           .click()
 
-        cy.get('.item').should('have.length', 0)
+        cy.get('.item')
+          .should('have.length', 0)
       })
 
       // Since the API is external,
@@ -237,8 +246,11 @@ describe('Hacker Stories', () => {
           cy.wait('@emptyRamdomizer')
         })
 
-        cy.get('.last-searches button')
-          .should('have.length', 5)
+        cy.get('.last-searches')
+          .within(()=>{
+            cy.get('button')
+              .should('have.length',5)
+          })
       })
     })
   })
