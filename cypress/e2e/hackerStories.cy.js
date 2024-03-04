@@ -77,6 +77,24 @@ describe('Hacker Stories', () => {
     // Hrm, how would I simulate such errors?
     // Since I still don't know, the tests are being skipped.
     // TODO: Find a way to test them out.
+    it('shows a "Loading ..." state before showing the results', () => 
+    {
+      const delayT = 'Loading ...'
+      cy.intercept
+      (
+        'GET',
+        '**/search**',
+        { delay:1000,
+          fixture:'empty' 
+        }
+      ).as('delayTeste')
+
+      cy.visit('/')
+      cy.get(`p:contains(${delayT})`)
+        .should('be.visible')
+      cy.wait('@delayTeste')
+})
+
     context('Errors', () => {
       it('shows "Something went wrong ..." in case of a server error', () => {
         const erroServer = 'Something went wrong'
@@ -236,7 +254,7 @@ describe('Hacker Stories', () => {
         .should('be.visible')
     })
 
-    context.only('Last searches', () => {
+    context('Last searches', () => {
       it('shows a max of 5 buttons for the last searched terms', () => {
         const faker = require('faker')
 
