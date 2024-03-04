@@ -163,14 +163,14 @@ describe('Hacker Stories', () => {
 
         it('orders by points', () => {})
       })
-      context('Shows no story when none is returned',() => {
-        it('Shows no story when none',() => {
+      context('Shows no story when none is returned', () => {
+        it('Shows no story when none', () => {
           cy.intercept(
             'GET',
             `**/search?query=${initialTerm}&page=0`,
             { fixture: 'empty' })
             .as('getEmpty')
-  
+
           cy.visit('/')
           cy.wait('@getEmpty')
           cy.get('.item')
@@ -240,16 +240,18 @@ describe('Hacker Stories', () => {
             '**/search**',
             { fixture: 'empty' }
           ).as('emptyRamdomizer')
+
           cy.get('#search')
             .clear()
             .type(`${faker.random.word()}{enter}`)
+
           cy.wait('@emptyRamdomizer')
         })
 
         cy.get('.last-searches')
-          .within(()=>{
+          .within(() => {
             cy.get('button')
-              .should('have.length',5)
+              .should('have.length', 5)
           })
       })
     })
